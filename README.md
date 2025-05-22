@@ -1,4 +1,6 @@
-# Atmosphere-Turbulence-Mitigation: PROTOTYPE CODE (update dfrom the D3 code)
+# MAMAT: 3D Mamba-Based Atmospheric Turbulence Removal and its Object Detection Capability
+
+[Paper](https://arxiv.org/pdf/2503.17700?), [Dataset](https://zenodo.org/records/13737763)
 
 ## Description
 
@@ -137,3 +139,12 @@ When pointing to a training dataset it must be formatted as follows
 ```
 Where each directory contains .mp4 video sequences for each training video.  gt is the ground truth (non distorted), turb is the distorted version.  If the ground truth is a single static image, then the image is just repeated with the appropriate gt .mp4 video for the same length as the output video.
 
+## Cite This Work
+
+```bibtex
+@inproceedings{hill2025mamat,
+  author    = {Paul Hill and Zhiming Liu and Nantheera Anantrasirichai},
+  title     = {{MAMAT: 3D Mamba-Based Atmospheric Turbulence Removal and its Object Detection Capability}},
+  booktitle = {Proceedings of the 21st IEEE International Conference on Advanced Visual and Signal-Based Surveillance (AVSS)},
+  year      = {2025},
+}
