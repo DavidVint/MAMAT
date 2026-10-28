@@ -1,5 +1,8 @@
 # ignored folders
 *.pth
+# except: turbbench's own dummy, untrained profiling-only checkpoint - not a real
+# trained weight, see dummy_weights/profiling_only.pth and repos.yaml's MAMAT entry
+!dummy_weights/*.pth
 *.tar
 *.log
 code/data/__pycache__/*
