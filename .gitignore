@@ -16,3 +16,6 @@ code/dataset_example/
 .idea/
 __pycache__/
 *.pyc
+
+*.pt
+*.ckpt
