@@ -13,3 +13,6 @@ code/FD/*.pth
 code/dataset_example/*
 code/dataset_example/
 
+.idea/
+__pycache__/
+*.pyc
