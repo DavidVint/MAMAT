@@ -1,8 +1,10 @@
 # ignored folders
 *.pth
-# except: turbbench's own dummy, untrained profiling-only checkpoint - not a real
-# trained weight, see dummy_weights/profiling_only.pth and repos.yaml's MAMAT entry
-!dummy_weights/*.pth
+# dummy_weights/*.pth (turbbench's own untrained profiling checkpoints) used to be
+# un-ignored and committed here - reverted (2026-11-06) so every variant, not just
+# the oversized sdat_mamba*/sdat_swin* ones, is generated locally/on Isambard
+# instead (scripts/make_dummy_weights.sh) rather than pushed to this fork - see
+# repos.yaml's own MAMAT checkpoints comment.
 *.tar
 *.log
 code/data/__pycache__/*
