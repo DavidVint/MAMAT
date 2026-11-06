@@ -111,7 +111,13 @@ class Deconv3D_Block(nn.Module):
         conv_type="dw",
     ):
         super(Deconv3D_Block, self).__init__()
-        if conv_type == "normal":
+        if conv_type in ("normal", "deform"):
+            # No deformable-transposed-conv implementation exists in this codebase
+            # (Conv3D_Block's encoder/downsampling side has one, this decoder/
+            # upsampling side never got one) - "deform" falls back to the same
+            # plain ConvTranspose3d as "normal" here, deliberately: deformable
+            # convs stay encoder-only rather than inventing an unverified
+            # deformable-deconv implementation nobody's tested.
             self.deconv = nn.Sequential(
                 norm(inp_feat),
                 nn.ConvTranspose3d(
@@ -342,7 +348,7 @@ class Conv3D_Block(nn.Module):
 
         if self.residual is not None:
             self.residual_upsampler = conv3d(
-                inp_feat, out_feat, kernel_size=1, bias=False
+                inp_feat, out_feat, kernel_size=1, stride=stride, padding=0, bias=False
             )
 
     def forward(self, x):
@@ -1128,7 +1134,11 @@ class TMT_MS(nn.Module):
             )
 
         if self.deform3D:
-            self.unet3d = UNet3D(norm="LN", residual="pool", conv_type="dw")
+            # conv_type="deform" (real 3D deformable convolutions, matching the
+            # paper's own SDAT description) rather than "dw" (depthwise) - the
+            # encoder side; Deconv3D_Block's own "deform" falls back to a plain
+            # ConvTranspose3d on the decoder side, see its own comment for why.
+            self.unet3d = UNet3D(norm="LN", residual="pool", conv_type="deform")
 
     def forward(self, inp_img):
         """forward pass

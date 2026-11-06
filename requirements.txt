@@ -11,11 +11,18 @@
 # txt already were. torch/torchvision get routed through PyTorch's own CUDA wheel
 # index by setup_repo.py regardless of pins here.
 #
-# mamba_ssm (needed by model/nnMamba.py, imported unconditionally by model/TMT_DC.py
-# even though mambadef=False means it's never actually instantiated) is deliberately
-# NOT listed here - it needs a CUDA build toolchain and model_adapter.py stubs it
-# out instead (see that file's own comment). Only revisit this if --mambadef ever
-# actually needs to be used for real.
+# mamba_ssm/causal_conv1d (needed by model/nnMamba.py for a real --mambadef run -
+# model/TMT_DC.py imports nnMamba unconditionally even though mambadef=False means
+# it's never actually instantiated) are listed here now (2026-11-06) so
+# setup_repo.py's existing _NO_BUILD_ISOLATION_PACKAGES/_NO_BUILD_ISOLATION_OVERRIDES
+# machinery (built for adapters/MambaTM, generic by package name - no per-model
+# special-casing needed) picks them up the same way for tb-mamat: --no-build-
+# isolation, mamba_ssm from the atalman C++20-for-torch-2.14 fork, MAMBA_KEEP_CUDA_
+# BUILD=TRUE. model_adapter.py's mamba_ssm stub is now conditional on --mambadef
+# (see its own comment) - only still needed for the swindef/plain-else variants
+# that never touch nnMamba at all.
+mamba_ssm
+causal_conv1d
 torch
 torchvision
 einops
