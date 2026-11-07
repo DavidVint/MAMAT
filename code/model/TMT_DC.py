@@ -935,6 +935,7 @@ class TMT_MS(nn.Module):
         swindef=False,
         mambadef=False,
         deform3D=False,
+        sdat_dim=32,
     ):
 
         super(TMT_MS, self).__init__()
@@ -1138,7 +1139,16 @@ class TMT_MS(nn.Module):
             # paper's own SDAT description) rather than "dw" (depthwise) - the
             # encoder side; Deconv3D_Block's own "deform" falls back to a plain
             # ConvTranspose3d on the decoder side, see its own comment for why.
-            self.unet3d = UNet3D(norm="LN", residual="pool", conv_type="deform")
+            # feat_channels scales proportionally off sdat_dim, keeping UNet3D's own
+            # default 1:4:4:8 ratio (32:128:128:256) - sdat_dim=32 reproduces that
+            # default exactly; a smaller sdat_dim (e.g. 16) shrinks every stage of
+            # this UNet3D together, independent of dim (the EDP module's own width).
+            self.unet3d = UNet3D(
+                norm="LN",
+                residual="pool",
+                conv_type="deform",
+                feat_channels=[sdat_dim, sdat_dim * 4, sdat_dim * 4, sdat_dim * 8],
+            )
 
     def forward(self, inp_img):
         """forward pass
